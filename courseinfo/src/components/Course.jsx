@@ -31,8 +31,7 @@ const Course = ({course}) => {
     const name = course.name
     let sum = 0
     course.parts.map(part => sum += part.exercises)
-
-
+    
   return (
     <>
     <Header name={name} />
