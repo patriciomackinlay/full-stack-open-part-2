@@ -1,6 +1,6 @@
 const Header = ({ name }) => <h1>{name}</h1>
 
-const Total = (sum) => <p>Number of exercises {sum.sum}</p>
+const Total = (sum) => <p><strong>total of {sum.sum} exercises</strong></p>
 
 const Part = ({part}) => {
     return (
