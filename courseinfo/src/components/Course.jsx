@@ -23,14 +23,15 @@ const Content = ({parts}) => {
 
 const Course = ({course}) => {
     const name = course.name
-    let sum = 0
-    course.parts.map(part => sum += part.exercises)
+    let total = course.parts.reduce(function(sum, order) {
+         return sum + order.exercises
+        }, 0)
 
   return (
     <>
     <Header name={name} />
     <Content parts={course.parts} />
-    <Total sum={sum} />
+    <Total sum={total} />
     </>
   )
 }
