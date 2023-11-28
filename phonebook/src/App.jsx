@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm.jsx'
 import Persons from './components/Persons.jsx'
+import personService from "./services/persons.js"
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -12,15 +13,13 @@ const App = () => {
 
   const filteredPhonebook = persons.filter((person) => person.name.toLowerCase().includes(newFilter.toLowerCase()))
 
-  const hook = () => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        setPersons(response.data)
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
-  }
-
-  useEffect(hook, [])
+  }, [])
 
   const addContact = (e) => {
     e.preventDefault()
@@ -30,7 +29,12 @@ const App = () => {
         name: newName,
         number: newNumber,
       }
-      setPersons(persons.concat(newPerson))
+
+      personService
+        .create(newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+        })
       setNewName("")
       setNewNumber("")
     }
