@@ -13,11 +13,15 @@ const App = () => {
 
   const filteredPhonebook = persons.filter((person) => person.name.toLowerCase().includes(newFilter.toLowerCase()))
 
+
   useEffect(() => {
     personService
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
+      })
+      .catch(error => {
+        console.log('fail')
       })
   }, [])
 
@@ -28,12 +32,16 @@ const App = () => {
       const newPerson = {
         name: newName,
         number: newNumber,
+        id: persons.length + 1
       }
 
       personService
         .create(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+        })
+        .catch(error => {
+          console.log('fail')
         })
       setNewName("")
       setNewNumber("")
@@ -56,6 +64,17 @@ const App = () => {
     setNewFilter(e.target.value)
   }
 
+  const handleDelete = (id, name) => {
+    if(window.confirm(`Delete ${name}?`)) {
+      personService
+          .deletePerson(id)
+          .catch(error => {
+            console.log('fail')
+          })
+      setPersons(persons.filter(person => person.id !== id))
+  }
+}
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -63,7 +82,7 @@ const App = () => {
       <h2>Add new contact</h2>
       <PersonForm addContact= {addContact} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons phonebook={filteredPhonebook} />
+      <Persons phonebook={filteredPhonebook} handleDelete={handleDelete}/>
       </div>
   )
 }
