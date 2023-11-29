@@ -41,13 +41,24 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
         })
         .catch(error => {
-          console.log('fail')
+          console.log('failed to add contact')
         })
       setNewName("")
       setNewNumber("")
     }
     else {
-      alert(`${newName} has already been added to the phonebook`)
+      if(window.confirm(`${newName} has already been added to the phonebook, do you want to update the number?`)) {
+        const person = persons.find(person => person.name === newName)
+        const updatedPerson = { ...person, number: newNumber }
+        personService
+          .update(updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+          })
+          .catch(error => {
+            console.log("failed to update")
+          })
+      }
     }
 
   }
