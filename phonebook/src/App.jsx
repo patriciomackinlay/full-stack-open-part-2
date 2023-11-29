@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm.jsx'
 import Persons from './components/Persons.jsx'
+import Notification from './components/Notification.jsx'
 import personService from "./services/persons.js"
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState("")
   const [newFilter, setNewFilter] = useState("")
+  const [notifMessage, setNotifMessage] = useState(null)
 
   const filteredPhonebook = persons.filter((person) => person.name.toLowerCase().includes(newFilter.toLowerCase()))
 
@@ -42,7 +44,15 @@ const App = () => {
         })
         .catch(error => {
           console.log('failed to add contact')
+          setNotifMessage(`failed to add ${newName}!`)
+          setTimeout(() => {
+            setNotifMessage(null)
+          }, 5000)
         })
+      setNotifMessage(`${newName} was succesfully added!`)
+      setTimeout(() => {
+        setNotifMessage(null)
+      }, 5000)
       setNewName("")
       setNewNumber("")
     }
@@ -57,7 +67,15 @@ const App = () => {
           })
           .catch(error => {
             console.log("failed to update")
+            setNotifMessage(`${newName}'s number failed to update!`)
+            setTimeout(() => {
+              setNotifMessage(null)
+            }, 5000)
           })
+          setNotifMessage(`${newName}'s number was succesfully updated!`)
+          setTimeout(() => {
+            setNotifMessage(null)
+          }, 5000)
       }
     }
 
@@ -89,6 +107,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message= {notifMessage} />
       <Filter value={newFilter} handleChange={handleFilterChange}/>
       <h2>Add new contact</h2>
       <PersonForm addContact= {addContact} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
