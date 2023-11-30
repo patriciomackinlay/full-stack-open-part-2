@@ -20,7 +20,7 @@ function App() {
       .catch(error => {
         alert("error when fetching")
       })
-  }, [])
+  }, [searched])
 
   const handleSearchChange = (event) => {
     setSearched(event.target.value.toLowerCase())
@@ -41,10 +41,10 @@ function App() {
   }
   
   let countryFullName = ""
-    let countryFullCapital = []
-    let countryFullArea = ""
-    let countryFullLanguages = []
-    let countryFullFlag = ""
+  let countryFullCapital = []
+  let countryFullArea = ""
+  let countryFullLanguages = []
+  let countryFullFlag = ""
 
   if(countriesToShow.length === 1) {
     countryFull = countriesToShow[0]
@@ -55,6 +55,12 @@ function App() {
     countryFullLanguages = Object.values(countryFull.languages)
     countryFullFlag = countryFull.flag
     console.log(countryFullName, countryFullCapital, countryFullArea, countryFullLanguages, countryFullFlag)
+  }
+
+  const handleShowCountry = (country) => {
+    countriesToShow = [country]
+    console.log(countriesToShow)
+    setCountries(countriesToShow)
   }
 
   return (
@@ -68,7 +74,8 @@ function App() {
     <p>{notif}</p>
     <ul>
       {countriesToShow.map(country => 
-        <Country key={country.name.common} name={country.name.common} />)}
+          <Country key={country.name.common} name={country.name.common} country={country} show={() => handleShowCountry (country)}/>
+      )}
     </ul>
     <CountryFull name={countryFullName} capital={countryFullCapital} area={countryFullArea} languages={countryFullLanguages} flag={countryFullFlag}/>
    </div>
