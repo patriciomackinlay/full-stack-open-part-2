@@ -1,6 +1,6 @@
-const Notification = ({ message }) => {
+const Error= ({ message }) => {
     const notifStyle = {
-        color: "green",
+        color: "red",
         background: "lightgrey",
         fontSize: "20px",
         borderStyle: "solid",
@@ -18,4 +18,4 @@ const Notification = ({ message }) => {
     )
 }
 
-export default Notification
+export default Error
